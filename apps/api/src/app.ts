@@ -3,6 +3,7 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { createAuthRoute } from './routes/auth.js'
 import { healthRoute } from './routes/health.js'
+import { createItemsRoute } from './routes/items.js'
 
 export type AppOptions = {
   jwtSecret: string
@@ -18,5 +19,6 @@ export function createApp(opts: AppOptions): Hono {
   app.use('*', cors())
   app.route('/health', healthRoute)
   app.route('/auth', createAuthRoute(opts.jwtSecret))
+  app.route('/api/items', createItemsRoute(opts.jwtSecret))
   return app
 }
