@@ -11,3 +11,20 @@ export {
   CardFooter,
 } from './card'
 export { Alert, type AlertProps } from './alert'
+export {
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  type DialogProps,
+} from './dialog'
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from './table'
+export { Select, type SelectProps } from './select'
