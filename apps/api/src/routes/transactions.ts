@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { type AuthVariables, createAuthMiddleware } from '../lib/auth-middleware.js'
+import { emit } from '../lib/events.js'
 import { createTransactionSchema } from '../schemas/transaction.js'
 import { InventoryError } from '../services/inventory.js'
 import { listTransactions, recordTransaction } from '../services/transactions.js'
@@ -17,6 +18,12 @@ export function createTransactionsRoute(jwtSecret: string) {
     try {
       const result = await recordTransaction(parsed.data, c.get('userId'))
       if (!result) return c.json({ error: 'Item not found' }, 404)
+      emit({
+        type: 'transaction.created',
+        transactionId: result.id,
+        itemId: parsed.data.itemId,
+        kind: parsed.data.type,
+      })
       return c.json(result, 201)
     } catch (err) {
       if (err instanceof InventoryError) {

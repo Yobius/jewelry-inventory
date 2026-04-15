@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { type AuthVariables, createAuthMiddleware } from '../lib/auth-middleware.js'
+import { emit } from '../lib/events.js'
 import { adjustInventorySchema } from '../schemas/inventory.js'
 import { InventoryError, adjustInventoryAbsolute } from '../services/inventory.js'
 
@@ -14,7 +15,9 @@ export function createInventoryRoute(jwtSecret: string) {
       return c.json({ error: 'Validation failed', details: parsed.error.flatten() }, 400)
     }
     try {
-      const inv = await adjustInventoryAbsolute(c.req.param('itemId'), parsed.data, c.get('userId'))
+      const itemId = c.req.param('itemId')
+      const inv = await adjustInventoryAbsolute(itemId, parsed.data, c.get('userId'))
+      emit({ type: 'inventory.adjusted', itemId })
       return c.json(inv)
     } catch (err) {
       if (err instanceof InventoryError && err.code === 'NOT_FOUND') {

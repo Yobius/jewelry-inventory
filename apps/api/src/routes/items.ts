@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { type AuthVariables, createAuthMiddleware } from '../lib/auth-middleware.js'
+import { emit } from '../lib/events.js'
 import { createItemSchema, listItemsQuerySchema, updateItemSchema } from '../schemas/item.js'
 import { createItem, getItemById, listItems, updateItem } from '../services/items.js'
 
@@ -18,6 +19,7 @@ export function createItemsRoute(jwtSecret: string) {
     const userId = c.get('userId')
     try {
       const item = await createItem(parsed.data, userId)
+      emit({ type: 'item.created', itemId: item.id })
       return c.json(item, 201)
     } catch (err) {
       if (isUniqueViolation(err)) {
@@ -52,6 +54,7 @@ export function createItemsRoute(jwtSecret: string) {
     const userId = c.get('userId')
     const item = await updateItem(c.req.param('id'), parsed.data, userId)
     if (!item) return c.json({ error: 'Not found' }, 404)
+    emit({ type: 'item.updated', itemId: item.id })
     return c.json(item)
   })
 
