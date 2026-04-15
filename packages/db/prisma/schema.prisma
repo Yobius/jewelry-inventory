@@ -1,0 +1,128 @@
+// Prisma schema for the jewelry inventory system.
+// JSON columns are typed via @jewelry/types.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  SELLER
+  CASHIER
+  AUDITOR
+}
+
+enum Material {
+  GOLD
+  SILVER
+  PLATINUM
+  OTHER
+}
+
+enum TransactionType {
+  IN
+  OUT
+  MOVE
+  ADJUSTMENT
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  password     String
+  name         String
+  role         UserRole      @default(SELLER)
+  location     Json?
+  items        Item[]        @relation("CreatedBy")
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Item {
+  id             String        @id @default(cuid())
+  sku            String        @unique
+  name           String
+  specs          Json
+  material       Material
+  carat          Int?
+  weight         Decimal       @db.Decimal(10, 2)
+  pricing        Json
+  identification Json
+  createdBy      String
+  createdByUser  User          @relation("CreatedBy", fields: [createdBy], references: [id])
+  inventory      Inventory?
+  transactions   Transaction[]
+  history        ItemHistory[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([sku])
+  @@index([name])
+}
+
+model Inventory {
+  id         String   @id @default(cuid())
+  itemId     String   @unique
+  item       Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  quantities Json
+  lastSync   DateTime @updatedAt
+
+  @@index([itemId])
+}
+
+model Transaction {
+  id        String          @id @default(cuid())
+  itemId    String
+  item      Item            @relation(fields: [itemId], references: [id])
+  movement  Json
+  quantity  Int
+  type      TransactionType
+  reason    String?
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  metadata  Json?
+  createdAt DateTime        @default(now())
+
+  @@index([itemId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ItemHistory {
+  id        String   @id @default(cuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  changes   Json
+  createdAt DateTime @default(now())
+
+  @@index([itemId])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  entityId  String
+  before    Json?
+  after     Json?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
