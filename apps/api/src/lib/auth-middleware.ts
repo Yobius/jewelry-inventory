@@ -11,10 +11,14 @@ export function createAuthMiddleware(secret: string): MiddlewareHandler<{
 }> {
   return async (c, next) => {
     const header = c.req.header('Authorization')
-    if (!header?.startsWith('Bearer ')) {
+    // Native EventSource cannot set headers, so SSE callers may pass ?token=.
+    // For other routes, header is still required.
+    const token = header?.startsWith('Bearer ')
+      ? header.slice('Bearer '.length)
+      : c.req.query('token')
+    if (!token) {
       return c.json({ error: 'Missing or invalid Authorization header' }, 401)
     }
-    const token = header.slice('Bearer '.length)
     try {
       const payload = await verifyJwt(token, secret)
       c.set('userId', payload.sub)

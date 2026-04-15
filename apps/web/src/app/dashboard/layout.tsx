@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuthStore } from '@/lib/auth-store'
+import { useInventoryStream } from '@/lib/use-inventory-stream'
 import { Button } from '@jewelry/ui'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -25,6 +26,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!token) router.replace('/login')
   }, [router, token])
+
+  useInventoryStream()
 
   if (!token) return null
 

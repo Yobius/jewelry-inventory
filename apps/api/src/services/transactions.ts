@@ -44,6 +44,7 @@ export async function recordTransaction(input: CreateTransactionInput, userId: s
 
 export function listTransactions(limit = 50) {
   return prisma.transaction.findMany({
+    include: { item: { select: { id: true, sku: true, name: true } } },
     orderBy: { createdAt: 'desc' },
     take: Math.min(limit, 200),
   })
