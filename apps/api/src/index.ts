@@ -3,7 +3,7 @@ import { createApp } from './app.js'
 import { parseEnv } from './env.js'
 
 const env = parseEnv()
-const app = createApp()
+const app = createApp({ jwtSecret: env.JWT_SECRET })
 
 serve({ fetch: app.fetch, port: env.API_PORT }, (info) => {
   console.log(`API listening on http://localhost:${info.port}`)
