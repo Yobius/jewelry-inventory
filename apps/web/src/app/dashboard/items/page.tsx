@@ -93,7 +93,12 @@ export default function ItemsPage() {
               <TableRow key={item.id}>
                 <TableCell className="font-mono text-xs">{item.sku}</TableCell>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.material}</TableCell>
+                <TableCell>
+                  {item.material}
+                  {item.carat ? (
+                    <span className="ml-1 text-xs text-neutral-500">· {item.carat}</span>
+                  ) : null}
+                </TableCell>
                 <TableCell>{item.weight} г</TableCell>
                 <TableCell>
                   <div className="flex flex-col text-xs text-neutral-600">

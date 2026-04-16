@@ -10,6 +10,7 @@ export type Item = {
   name: string
   specs: { tags?: string[]; width?: number; height?: number; depth?: number }
   material: Material
+  /** Проба / fineness: 585, 750, 925, 999… */
   carat: number | null
   weight: string
   pricing: { unitPrice: string; perGram: string }

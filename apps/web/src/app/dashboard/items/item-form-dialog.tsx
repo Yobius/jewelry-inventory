@@ -22,10 +22,27 @@ import { z } from 'zod'
 
 const decimalString = z.string().regex(/^\d+(\.\d{1,2})?$/, 'Число с точностью до 0.01')
 
+const CARAT_PRESETS: Record<'GOLD' | 'SILVER' | 'PLATINUM' | 'OTHER', number[]> = {
+  GOLD: [375, 500, 585, 750, 958, 999],
+  SILVER: [800, 830, 875, 925, 960, 999],
+  PLATINUM: [850, 900, 950, 999],
+  OTHER: [],
+}
+
+function generateQrCode() {
+  const raw =
+    globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  return `JWL-${raw.replace(/-/g, '').slice(0, 12).toUpperCase()}`
+}
+
 const itemFormSchema = z.object({
   sku: z.string().min(1, 'SKU обязательно'),
   name: z.string().min(1, 'Название обязательно'),
   material: z.enum(['GOLD', 'SILVER', 'PLATINUM', 'OTHER']),
+  carat: z
+    .union([z.literal(''), z.coerce.number().int().min(0).max(999)])
+    .optional()
+    .transform((v) => (v === '' || v === undefined ? undefined : v)),
   weight: decimalString,
   unitPrice: decimalString,
   perGram: decimalString,
@@ -36,7 +53,7 @@ const itemFormSchema = z.object({
   point2: z.coerce.number().int().min(0).default(0),
   point3: z.coerce.number().int().min(0).default(0),
 })
-type ItemForm = z.infer<typeof itemFormSchema>
+type ItemForm = z.input<typeof itemFormSchema>
 
 type Props = {
   open: boolean
@@ -48,6 +65,7 @@ const defaultValues: ItemForm = {
   sku: '',
   name: '',
   material: 'SILVER',
+  carat: '',
   weight: '0.00',
   unitPrice: '0.00',
   perGram: '0.00',
@@ -75,6 +93,7 @@ export function ItemFormDialog({ open, onOpenChange, initialItem }: Props) {
         sku: initialItem.sku,
         name: initialItem.name,
         material: initialItem.material,
+        carat: initialItem.carat ?? '',
         weight: initialItem.weight,
         unitPrice: initialItem.pricing.unitPrice,
         perGram: initialItem.pricing.perGram,
@@ -90,12 +109,21 @@ export function ItemFormDialog({ open, onOpenChange, initialItem }: Props) {
     }
   }, [open, initialItem, form])
 
+  const currentMaterial = form.watch('material')
+
   const mutation = useMutation<unknown, ApiError, ItemForm>({
     mutationFn: async (values) => {
+      const caratNumber =
+        typeof values.carat === 'number'
+          ? values.carat
+          : values.carat === '' || values.carat === undefined
+            ? null
+            : Number(values.carat)
       const body = {
         sku: values.sku,
         name: values.name,
         material: values.material,
+        ...(caratNumber !== null && !Number.isNaN(caratNumber) ? { carat: caratNumber } : {}),
         weight: values.weight,
         specs: {
           tags: values.tags
@@ -167,6 +195,32 @@ export function ItemFormDialog({ open, onOpenChange, initialItem }: Props) {
             </Select>
           </div>
           <div className="flex flex-col gap-1.5">
+            <Label htmlFor="carat">Проба</Label>
+            <Input
+              id="carat"
+              type="number"
+              placeholder="585, 750, 925…"
+              {...form.register('carat')}
+            />
+            {CARAT_PRESETS[currentMaterial].length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {CARAT_PRESETS[currentMaterial].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => form.setValue('carat', preset, { shouldDirty: true })}
+                    className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs text-neutral-700 transition hover:border-neutral-900 hover:bg-neutral-900 hover:text-white"
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+            )}
+            {form.formState.errors.carat && (
+              <p className="text-xs text-red-600">{form.formState.errors.carat.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1.5">
             <Label htmlFor="weight">Вес (г)</Label>
             <Input id="weight" {...form.register('weight')} />
             {form.formState.errors.weight && (
@@ -189,7 +243,21 @@ export function ItemFormDialog({ open, onOpenChange, initialItem }: Props) {
           </div>
           <div className="col-span-2 flex flex-col gap-1.5">
             <Label htmlFor="qrCode">QR-код</Label>
-            <Input id="qrCode" {...form.register('qrCode')} />
+            <div className="flex gap-2">
+              <Input id="qrCode" className="flex-1" {...form.register('qrCode')} />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  form.setValue('qrCode', generateQrCode(), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                Сгенерировать
+              </Button>
+            </div>
             {form.formState.errors.qrCode && (
               <p className="text-xs text-red-600">{form.formState.errors.qrCode.message}</p>
             )}

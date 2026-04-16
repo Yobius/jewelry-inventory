@@ -166,7 +166,10 @@ export default function ScanPage() {
               <dt className="font-medium text-neutral-700">Название</dt>
               <dd>{match.name}</dd>
               <dt className="font-medium text-neutral-700">Материал</dt>
-              <dd>{match.material}</dd>
+              <dd>
+                {match.material}
+                {match.carat ? ` · ${match.carat}` : ''}
+              </dd>
               <dt className="font-medium text-neutral-700">Вес</dt>
               <dd>{match.weight} г</dd>
             </dl>
