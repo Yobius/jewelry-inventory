@@ -6,10 +6,7 @@ let totalUnits = 0
 for (const inv of invs) {
   const q = (inv.quantities ?? {}) as Record<string, number>
   totalUnits +=
-    Number(q.warehouse ?? 0) +
-    Number(q.point1 ?? 0) +
-    Number(q.point2 ?? 0) +
-    Number(q.point3 ?? 0)
+    Number(q.warehouse ?? 0) + Number(q.point1 ?? 0) + Number(q.point2 ?? 0) + Number(q.point3 ?? 0)
   for (const k of Object.keys(byLocation) as (keyof typeof byLocation)[]) {
     byLocation[k] += Number(q[k] ?? 0)
   }

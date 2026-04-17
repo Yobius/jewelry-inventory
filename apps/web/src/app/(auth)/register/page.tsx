@@ -65,7 +65,9 @@ export default function RegisterPage() {
             <Label htmlFor="name">Имя</Label>
             <Input id="name" {...form.register('name')} disabled={mutation.isPending} />
             {form.formState.errors.name && (
-              <p className="text-sm text-red-600 dark:text-red-400">{form.formState.errors.name.message}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {form.formState.errors.name.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -78,7 +80,9 @@ export default function RegisterPage() {
               disabled={mutation.isPending}
             />
             {form.formState.errors.email && (
-              <p className="text-sm text-red-600 dark:text-red-400">{form.formState.errors.email.message}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {form.formState.errors.email.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -91,7 +95,9 @@ export default function RegisterPage() {
               disabled={mutation.isPending}
             />
             {form.formState.errors.password && (
-              <p className="text-sm text-red-600 dark:text-red-400">{form.formState.errors.password.message}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {form.formState.errors.password.message}
+              </p>
             )}
           </div>
           {mutation.error && <Alert variant="destructive">{mutation.error.message}</Alert>}

@@ -139,9 +139,7 @@ export default function PricingPage() {
             <LabeledSelect
               label="Виробник"
               value={filter.manufacturerId ?? ''}
-              onChange={(v) =>
-                setFilter((f) => ({ ...f, manufacturerId: v || undefined }))
-              }
+              onChange={(v) => setFilter((f) => ({ ...f, manufacturerId: v || undefined }))}
             >
               <option value="">— будь-який —</option>
               {manufacturers.data?.items.map((m) => (
@@ -176,34 +174,26 @@ export default function PricingPage() {
               type="number"
               step="0.01"
               value={filter.weightMin?.toString() ?? ''}
-              onChange={(v) =>
-                setFilter((f) => ({ ...f, weightMin: v ? Number(v) : undefined }))
-              }
+              onChange={(v) => setFilter((f) => ({ ...f, weightMin: v ? Number(v) : undefined }))}
             />
             <LabeledInput
               label="Вага ≤, г"
               type="number"
               step="0.01"
               value={filter.weightMax?.toString() ?? ''}
-              onChange={(v) =>
-                setFilter((f) => ({ ...f, weightMax: v ? Number(v) : undefined }))
-              }
+              onChange={(v) => setFilter((f) => ({ ...f, weightMax: v ? Number(v) : undefined }))}
             />
             <LabeledInput
               label="Проба ≥"
               type="number"
               value={filter.caratMin?.toString() ?? ''}
-              onChange={(v) =>
-                setFilter((f) => ({ ...f, caratMin: v ? Number(v) : undefined }))
-              }
+              onChange={(v) => setFilter((f) => ({ ...f, caratMin: v ? Number(v) : undefined }))}
             />
             <LabeledInput
               label="Проба ≤"
               type="number"
               value={filter.caratMax?.toString() ?? ''}
-              onChange={(v) =>
-                setFilter((f) => ({ ...f, caratMax: v ? Number(v) : undefined }))
-              }
+              onChange={(v) => setFilter((f) => ({ ...f, caratMax: v ? Number(v) : undefined }))}
             />
           </div>
         </CardContent>

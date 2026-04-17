@@ -146,9 +146,7 @@ export default function ImportsPage() {
       const res = await authedFetch('/api/imports/excel/preview', { method: 'POST', body: fd })
       const j = (await res.json()) as unknown
       if (!res.ok) {
-        throw new Error(
-          (j as { error?: string }).error ?? `Preview failed (${res.status})`,
-        )
+        throw new Error((j as { error?: string }).error ?? `Preview failed (${res.status})`)
       }
       return j as PreviewResponse
     },
@@ -214,9 +212,7 @@ export default function ImportsPage() {
       })
       const j = (await res.json()) as unknown
       if (!res.ok) {
-        throw new Error(
-          (j as { error?: string }).error ?? `Execute failed (${res.status})`,
-        )
+        throw new Error((j as { error?: string }).error ?? `Execute failed (${res.status})`)
       }
       return j as ExecuteResponse
     },
@@ -239,8 +235,8 @@ export default function ImportsPage() {
           Імпорт з Excel
         </h2>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Завантажте накладну постачальника у форматі .xlsx — система автоматично впізнає колонки
-          та створить товари.
+          Завантажте накладну постачальника у форматі .xlsx — система автоматично впізнає колонки та
+          створить товари.
         </p>
       </div>
 
@@ -353,12 +349,8 @@ export default function ImportsPage() {
         </CardContent>
       </Card>
 
-      {preview.isPending && (
-        <Alert>Читаю файл…</Alert>
-      )}
-      {preview.error && (
-        <Alert variant="destructive">{preview.error.message}</Alert>
-      )}
+      {preview.isPending && <Alert>Читаю файл…</Alert>}
+      {preview.error && <Alert variant="destructive">{preview.error.message}</Alert>}
 
       {preview.data && skuCheck && (
         <div className="flex flex-wrap items-center gap-4 rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm dark:border-neutral-800 dark:bg-neutral-900">
@@ -371,9 +363,7 @@ export default function ImportsPage() {
           <span className="font-medium text-blue-700 dark:text-blue-400">
             ↻ оновиться {skuCheck.existing.length}
           </span>
-          {skuCheckLoading && (
-            <span className="text-xs text-neutral-500">…перевірка</span>
-          )}
+          {skuCheckLoading && <span className="text-xs text-neutral-500">…перевірка</span>}
         </div>
       )}
 
@@ -469,18 +459,14 @@ export default function ImportsPage() {
                 onClick={() => execute.mutate()}
                 disabled={execute.isPending || !mapping.sku || !mapping.weight}
               >
-                {execute.isPending
-                  ? 'Імпортуємо…'
-                  : `Імпортувати ${preview.data.rowCount} рядків`}
+                {execute.isPending ? 'Імпортуємо…' : `Імпортувати ${preview.data.rowCount} рядків`}
               </Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {execute.error && (
-        <Alert variant="destructive">{execute.error.message}</Alert>
-      )}
+      {execute.error && <Alert variant="destructive">{execute.error.message}</Alert>}
 
       {execute.data && (
         <Card>
@@ -516,9 +502,7 @@ export default function ImportsPage() {
                     </li>
                   ))}
                   {execute.data.errors.length > 100 && (
-                    <li className="text-neutral-500">
-                      …та ще {execute.data.errors.length - 100}
-                    </li>
+                    <li className="text-neutral-500">…та ще {execute.data.errors.length - 100}</li>
                   )}
                 </ul>
               </div>
@@ -546,7 +530,10 @@ export default function ImportsPage() {
             <TableBody>
               {pastImports.data?.imports.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-neutral-500 dark:text-neutral-400">
+                  <TableCell
+                    colSpan={5}
+                    className="text-center text-neutral-500 dark:text-neutral-400"
+                  >
                     Ще не було жодного імпорту
                   </TableCell>
                 </TableRow>
@@ -608,8 +595,7 @@ function Stat({
 function StatusBadge({ status }: { status: string }) {
   const cls: Record<string, string> = {
     completed: 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300',
-    'completed-with-errors':
-      'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
+    'completed-with-errors': 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
     'in-progress': 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
     failed: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
   }

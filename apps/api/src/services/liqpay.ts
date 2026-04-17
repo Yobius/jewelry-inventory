@@ -45,7 +45,9 @@ export type SignedRequest = {
 }
 
 export function sign(data: string, privateKey: string): string {
-  return createHash('sha1').update(privateKey + data + privateKey).digest('base64')
+  return createHash('sha1')
+    .update(privateKey + data + privateKey)
+    .digest('base64')
 }
 
 export function encodePayload(payload: Record<string, unknown>): string {
@@ -122,9 +124,7 @@ export type LiqPayCallbackPayload = {
   paytype?: string
 }
 
-export function isTerminalStatus(
-  status: string,
-): 'success' | 'failed' | 'pending' {
+export function isTerminalStatus(status: string): 'success' | 'failed' | 'pending' {
   if (status === 'success' || status === 'sandbox') return 'success'
   if (status === 'failure' || status === 'error' || status === 'reversed') return 'failed'
   return 'pending'

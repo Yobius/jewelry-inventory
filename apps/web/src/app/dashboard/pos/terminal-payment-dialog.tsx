@@ -113,17 +113,14 @@ export function TerminalPaymentDialog({
 
   const currentStatus = status.data?.status ?? 'PENDING'
   const isError = create.error || status.error
-  const isConfigError = (create.error as Error & { status?: number })?.message?.includes(
-    'LiqPay',
-  )
+  const isConfigError = (create.error as Error & { status?: number })?.message?.includes('LiqPay')
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} className="max-w-lg">
       <DialogHeader>
         <DialogTitle>Оплата через термінал (ПриватБанк)</DialogTitle>
         <DialogDescription>
-          Сума: {amount.toFixed(2)} ₴
-          {discountPct > 0 && ` · знижка ${discountPct}%`}
+          Сума: {amount.toFixed(2)} ₴{discountPct > 0 && ` · знижка ${discountPct}%`}
         </DialogDescription>
       </DialogHeader>
 
@@ -132,11 +129,7 @@ export function TerminalPaymentDialog({
           <div className="text-sm text-neutral-500 dark:text-neutral-400">Готуємо QR…</div>
         )}
 
-        {isConfigError && (
-          <Alert variant="destructive">
-            {(create.error as Error).message}
-          </Alert>
-        )}
+        {isConfigError && <Alert variant="destructive">{(create.error as Error).message}</Alert>}
 
         {isError && !isConfigError && (
           <Alert variant="destructive">
@@ -169,9 +162,7 @@ export function TerminalPaymentDialog({
         {currentStatus === 'SUCCESS' && (
           <div className="flex flex-col items-center gap-2">
             <div className="text-5xl">✅</div>
-            <div className="text-lg font-semibold text-green-700 dark:text-green-400">
-              Оплачено
-            </div>
+            <div className="text-lg font-semibold text-green-700 dark:text-green-400">Оплачено</div>
             <div className="text-xs text-neutral-500">Чек: {receiptId}</div>
           </div>
         )}
@@ -179,9 +170,7 @@ export function TerminalPaymentDialog({
         {currentStatus === 'FAILED' && (
           <div className="flex flex-col items-center gap-2">
             <div className="text-5xl">❌</div>
-            <div className="text-lg font-semibold text-red-700 dark:text-red-400">
-              Відхилено
-            </div>
+            <div className="text-lg font-semibold text-red-700 dark:text-red-400">Відхилено</div>
           </div>
         )}
 

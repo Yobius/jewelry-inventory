@@ -6,9 +6,9 @@ import { writeAudit } from '../lib/audit.js'
 import { type AuthVariables, createAuthMiddleware } from '../lib/auth-middleware.js'
 import { emit } from '../lib/events.js'
 import {
+  type LiqPayCallbackPayload,
   createInvoice,
   isTerminalStatus,
-  type LiqPayCallbackPayload,
   verifyCallback,
 } from '../services/liqpay.js'
 
@@ -92,7 +92,8 @@ export function createPaymentsRoute(env: Env, jwtSecret: string) {
       })
       return c.json(
         {
-          error: 'LiqPay (ПриватБанк) ще не налаштовано. Додай LIQPAY_PUBLIC_KEY і LIQPAY_PRIVATE_KEY у .env на сервері і зроби redeploy.',
+          error:
+            'LiqPay (ПриватБанк) ще не налаштовано. Додай LIQPAY_PUBLIC_KEY і LIQPAY_PRIVATE_KEY у .env на сервері і зроби redeploy.',
         },
         503,
       )

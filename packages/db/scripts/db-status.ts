@@ -28,7 +28,8 @@ if (u > 0) {
     take: 5,
   })
   console.log('\nUsers:')
-  for (const user of users) console.log(`  ${user.role.padEnd(8)} ${user.email} (${user.name}) [${user.id}]`)
+  for (const user of users)
+    console.log(`  ${user.role.padEnd(8)} ${user.email} (${user.name}) [${user.id}]`)
 }
 
 await prisma.$disconnect()

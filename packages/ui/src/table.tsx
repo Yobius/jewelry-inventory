@@ -47,7 +47,11 @@ TableBody.displayName = 'TableBody'
 
 export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
-    <tr ref={ref} className={cn('hover:bg-neutral-50 dark:hover:bg-neutral-800', className)} {...props} />
+    <tr
+      ref={ref}
+      className={cn('hover:bg-neutral-50 dark:hover:bg-neutral-800', className)}
+      {...props}
+    />
   ),
 )
 TableRow.displayName = 'TableRow'

@@ -7,7 +7,7 @@
  * Usage:
  *   pnpm tsx packages/db/scripts/mdb-inspect.ts <path-to-mdb> [--tables=A,B,C] [--sample=5]
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import MDBReader from 'mdb-reader'
 
@@ -58,7 +58,9 @@ for (const name of targets) {
       })
     }
     reports.push({ name, rowCount, columns, sample: rows })
-    console.log(`${name.padEnd(28)} rows=${rowCount.toString().padStart(7)}  cols=${columns.length}`)
+    console.log(
+      `${name.padEnd(28)} rows=${rowCount.toString().padStart(7)}  cols=${columns.length}`,
+    )
   } catch (e) {
     console.error(`  ! ${name}: ${(e as Error).message}`)
   }

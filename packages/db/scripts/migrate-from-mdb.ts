@@ -32,8 +32,8 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import MDBReader from 'mdb-reader'
 import { Prisma } from '@prisma/client'
+import MDBReader from 'mdb-reader'
 import { prisma } from '../src/index.js'
 
 // ---------- CLI parsing ----------
@@ -41,7 +41,9 @@ import { prisma } from '../src/index.js'
 const args = process.argv.slice(2)
 const mdbPath = args.find((a) => !a.startsWith('--'))
 if (!mdbPath) {
-  console.error('usage: migrate-from-mdb.ts <mdb-path> [--apply] [--step=<refs|items|all>] [--batch=N] [--start-from=ID] [--owner-email=X]')
+  console.error(
+    'usage: migrate-from-mdb.ts <mdb-path> [--apply] [--step=<refs|items|all>] [--batch=N] [--start-from=ID] [--owner-email=X]',
+  )
   process.exit(1)
 }
 
@@ -133,9 +135,7 @@ type MdbSize = { ID: number; Size: string | null }
 const products = reader.getTable('Products').getData() as unknown as MdbProduct[]
 const movements = reader.getTable('Movements').getData() as unknown as MdbMovement[]
 const suppliers = reader.getTable('Supplyer').getData() as unknown as MdbSupplier[]
-const typeOfProduct = reader
-  .getTable('TypeOfProduct')
-  .getData() as unknown as MdbTypeOfProduct[]
+const typeOfProduct = reader.getTable('TypeOfProduct').getData() as unknown as MdbTypeOfProduct[]
 const categories = reader.getTable('Category').getData() as unknown as MdbCategory[]
 const sizes = reader.getTable('Sizes').getData() as unknown as MdbSize[]
 
@@ -339,13 +339,16 @@ async function stepItems(): Promise<void> {
         const loc = m.ClientID != null ? clientToLocation.get(m.ClientID) : null
         if (!loc) {
           skipped++
-          errors.push({ recordId: m.RecordID, field: 'ClientID', message: `no location mapping for ClientID=${m.ClientID}` })
+          errors.push({
+            recordId: m.RecordID,
+            field: 'ClientID',
+            message: `no location mapping for ClientID=${m.ClientID}`,
+          })
           continue
         }
 
         // Material + carat
-        const mc =
-          m.TypeOfProduct != null ? typeToMaterial.get(m.TypeOfProduct) : null
+        const mc = m.TypeOfProduct != null ? typeToMaterial.get(m.TypeOfProduct) : null
         if (!mc) {
           errors.push({
             recordId: m.RecordID,

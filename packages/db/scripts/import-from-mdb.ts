@@ -11,9 +11,9 @@
  *   npx tsx scripts/import-from-mdb.ts
  */
 
-import { PrismaClient, type Material } from '@prisma/client'
-import { readFileSync } from 'fs'
-import { parse } from 'path'
+import { readFileSync } from 'node:fs'
+import { parse } from 'node:path'
+import { type Material, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -81,7 +81,7 @@ const typeMap = new Map<string, TypeInfo>()
 for (const row of typesRaw) {
   const isGold = row.IsGold === '1'
   const isSilver = row.IsSilver === '1'
-  const probe = row.Probe ? parseInt(row.Probe, 10) : null
+  const probe = row.Probe ? Number.parseInt(row.Probe, 10) : null
   const material: Material = isGold ? 'GOLD' : isSilver ? 'SILVER' : 'OTHER'
   typeMap.set(row.ID, { material, carat: probe && probe > 0 ? probe : null, name: row.Type })
 }
@@ -133,17 +133,25 @@ async function main() {
 
     for (const row of batch) {
       const artNum = row.ArtNum?.trim()
-      if (!artNum) { skipped++; continue }
+      if (!artNum) {
+        skipped++
+        continue
+      }
 
       // Resolve type
-      const typeInfo = typeMap.get(row.Group) ?? { material: 'OTHER' as Material, carat: null, name: '' }
+      const typeInfo = typeMap.get(row.Group) ?? {
+        material: 'OTHER' as Material,
+        carat: null,
+        name: '',
+      }
       const categoryName = categoryMap.get(row.Category) ?? null
 
       // Build unique SKU
       let sku = artNum
       if (usedSkus.has(sku)) {
         // Append material suffix for duplicates
-        const suffix = typeInfo.material === 'GOLD' ? 'G' : typeInfo.material === 'SILVER' ? 'S' : 'X'
+        const suffix =
+          typeInfo.material === 'GOLD' ? 'G' : typeInfo.material === 'SILVER' ? 'S' : 'X'
         sku = `${artNum}-${suffix}`
         if (usedSkus.has(sku)) {
           sku = `${artNum}-${suffix}${row.ID}`
@@ -155,12 +163,19 @@ async function main() {
       }
       usedSkus.add(sku)
 
-      const weight = parseFloat(row.Wgh_ug || '0') || 0
-      const perGram = parseFloat(row.PerGramm || '0') || 0
-      const price = parseFloat(row.Price || '0') || 0
-      const silvPerGram = parseFloat(row.SilvPerGramm || '0') || 0
+      const weight = Number.parseFloat(row.Wgh_ug || '0') || 0
+      const perGram = Number.parseFloat(row.PerGramm || '0') || 0
+      const price = Number.parseFloat(row.Price || '0') || 0
+      const silvPerGram = Number.parseFloat(row.SilvPerGramm || '0') || 0
 
-      const unitPrice = price > 0 ? price : perGram > 0 ? perGram * weight : silvPerGram > 0 ? silvPerGram * weight : 0
+      const unitPrice =
+        price > 0
+          ? price
+          : perGram > 0
+            ? perGram * weight
+            : silvPerGram > 0
+              ? silvPerGram * weight
+              : 0
 
       creates.push({
         sku,
@@ -197,7 +212,9 @@ async function main() {
     }
 
     if ((i + BATCH_SIZE) % 5000 === 0 || i + BATCH_SIZE >= productsRaw.length) {
-      console.log(`  Progress: ${Math.min(i + BATCH_SIZE, productsRaw.length)}/${productsRaw.length} | imported: ${imported} | skipped: ${skipped} | errors: ${errors}`)
+      console.log(
+        `  Progress: ${Math.min(i + BATCH_SIZE, productsRaw.length)}/${productsRaw.length} | imported: ${imported} | skipped: ${skipped} | errors: ${errors}`,
+      )
     }
   }
 

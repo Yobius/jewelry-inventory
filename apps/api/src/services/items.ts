@@ -123,13 +123,15 @@ export function buildItemsWhere(params: ListItemsParams): Prisma.ItemWhereInput 
   return where
 }
 
-export async function listItems(
-  params: ListItemsParams = {},
-): Promise<[unknown[], number]> {
+export async function listItems(params: ListItemsParams = {}): Promise<[unknown[], number]> {
   const { skip = 0, take = 20, sort, location, lowStock } = params
   const needsInventoryFilter = Boolean(location || lowStock)
-  const inventorySort = sort && sort !== 'created_desc' && sort !== 'created_asc'
-    && sort !== 'sku_asc' && sort !== 'sku_desc'
+  const inventorySort =
+    sort &&
+    sort !== 'created_desc' &&
+    sort !== 'created_asc' &&
+    sort !== 'sku_asc' &&
+    sort !== 'sku_desc'
   const needsRaw = needsInventoryFilter || inventorySort
 
   const where = buildItemsWhere(params)

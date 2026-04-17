@@ -1,7 +1,7 @@
 'use client'
 
 import { apiRequest } from '@/lib/api-client'
-import { formatDate, LOCATION_LABELS } from '@/lib/format'
+import { LOCATION_LABELS, formatDate } from '@/lib/format'
 import {
   Card,
   CardContent,
@@ -114,29 +114,15 @@ export default function SalesPage() {
           <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="from">З</Label>
-              <Input
-                id="from"
-                type="date"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-              />
+              <Input id="from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="to">По</Label>
-              <Input
-                id="to"
-                type="date"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-              />
+              <Input id="to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="loc">Локація</Label>
-              <Select
-                id="loc"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              >
+              <Select id="loc" value={location} onChange={(e) => setLocation(e.target.value)}>
                 <option value="">— всі —</option>
                 {LOCATIONS.map((l) => (
                   <option key={l} value={l}>
@@ -147,11 +133,7 @@ export default function SalesPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="mat">Метал</Label>
-              <Select
-                id="mat"
-                value={material}
-                onChange={(e) => setMaterial(e.target.value)}
-              >
+              <Select id="mat" value={material} onChange={(e) => setMaterial(e.target.value)}>
                 <option value="">— всі —</option>
                 {MATERIALS.map((m) => (
                   <option key={m} value={m}>
@@ -162,11 +144,7 @@ export default function SalesPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="sup">Постачальник</Label>
-              <Select
-                id="sup"
-                value={supplierId}
-                onChange={(e) => setSupplierId(e.target.value)}
-              >
+              <Select id="sup" value={supplierId} onChange={(e) => setSupplierId(e.target.value)}>
                 <option value="">— всі —</option>
                 {suppliers.data?.items.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -181,10 +159,7 @@ export default function SalesPage() {
 
       {sales.data && (
         <div className="grid grid-cols-3 gap-4">
-          <Stat
-            label="Чеків"
-            value={sales.data.transactions.length.toLocaleString('uk-UA')}
-          />
+          <Stat label="Чеків" value={sales.data.transactions.length.toLocaleString('uk-UA')} />
           <Stat label="Одиниць" value={sales.data.totalUnits.toLocaleString('uk-UA')} />
           <Stat label="Виторг, ₴" value={sales.data.totalRevenue} accent="green" />
         </div>
@@ -240,9 +215,7 @@ export default function SalesPage() {
                   <TableCell>
                     {t.item ? (
                       <div className="flex flex-col">
-                        <span className="font-mono text-xs text-neutral-500">
-                          {t.item.sku}
-                        </span>
+                        <span className="font-mono text-xs text-neutral-500">{t.item.sku}</span>
                         <span>{t.item.name}</span>
                       </div>
                     ) : (
@@ -252,20 +225,14 @@ export default function SalesPage() {
                   <TableCell className="text-xs">{t.item?.material ?? '—'}</TableCell>
                   <TableCell className="text-xs">
                     {t.movement?.from
-                      ? LOCATION_LABELS[t.movement.from as keyof typeof LOCATION_LABELS] ??
-                        t.movement.from
+                      ? (LOCATION_LABELS[t.movement.from as keyof typeof LOCATION_LABELS] ??
+                        t.movement.from)
                       : '—'}
                   </TableCell>
                   <TableCell className="text-right font-mono">{t.quantity}</TableCell>
-                  <TableCell className="text-right font-mono text-xs">
-                    {t.unitPrice}
-                  </TableCell>
-                  <TableCell className="text-right font-mono font-semibold">
-                    {t.total}
-                  </TableCell>
-                  <TableCell className="text-xs text-neutral-500">
-                    {t.user?.name ?? '—'}
-                  </TableCell>
+                  <TableCell className="text-right font-mono text-xs">{t.unitPrice}</TableCell>
+                  <TableCell className="text-right font-mono font-semibold">{t.total}</TableCell>
+                  <TableCell className="text-xs text-neutral-500">{t.user?.name ?? '—'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

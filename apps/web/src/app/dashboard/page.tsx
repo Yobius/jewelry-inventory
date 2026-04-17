@@ -1,8 +1,9 @@
 'use client'
 
 import { apiRequest } from '@/lib/api-client'
-import { LOCATION_LABELS } from '@/lib/format'
 import { useAuthStore } from '@/lib/auth-store'
+import { LOCATION_LABELS, formatDate } from '@/lib/format'
+import type { Transaction, TransactionsListResponse } from '@/lib/types'
 import {
   Card,
   CardContent,
@@ -41,7 +42,34 @@ export default function DashboardPage() {
     refetchInterval: 30_000,
   })
 
+  const txQuery = useQuery<TransactionsListResponse>({
+    queryKey: ['transactions', 'dashboard-journal'],
+    queryFn: () => apiRequest<TransactionsListResponse>('/api/transactions?limit=20'),
+    refetchInterval: 30_000,
+  })
+
   const s = q.data
+
+  const TX_TYPE_LABELS: Record<Transaction['type'], string> = {
+    IN: 'Прихід',
+    OUT: 'Розхід',
+    MOVE: 'Переміщення',
+    ADJUSTMENT: 'Коригування',
+  }
+  const TX_TYPE_COLORS: Record<Transaction['type'], string> = {
+    IN: 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300',
+    OUT: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
+    MOVE: 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
+    ADJUSTMENT: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
+  }
+  function fmtMovement(tx: Transaction): string {
+    const from = tx.movement.from ? LOCATION_LABELS[tx.movement.from] : null
+    const to = tx.movement.to ? LOCATION_LABELS[tx.movement.to] : null
+    if (from && to) return `${from} → ${to}`
+    if (from) return `з ${from}`
+    if (to) return `в ${to}`
+    return '—'
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -141,9 +169,7 @@ export default function DashboardPage() {
                 {(['warehouse', 'point1', 'point2', 'point3'] as const).map((k) => {
                   const units = s.inventory.byLocation[k] ?? 0
                   const pct =
-                    s.inventory.totalUnits > 0
-                      ? (units / s.inventory.totalUnits) * 100
-                      : 0
+                    s.inventory.totalUnits > 0 ? (units / s.inventory.totalUnits) * 100 : 0
                   return (
                     <li key={k} className="flex flex-col gap-1">
                       <div className="flex justify-between">
@@ -247,6 +273,75 @@ export default function DashboardPage() {
           </Card>
         </div>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Журнал руху товарів</CardTitle>
+          <CardDescription>Останні 20 операцій</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {txQuery.isLoading && (
+            <p className="py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              Завантаження…
+            </p>
+          )}
+          {txQuery.data?.transactions.length === 0 && (
+            <p className="py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              Ще немає рухів
+            </p>
+          )}
+          {(txQuery.data?.transactions.length ?? 0) > 0 && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Дата</TableHead>
+                  <TableHead>Товар</TableHead>
+                  <TableHead>Операція</TableHead>
+                  <TableHead>К-сть</TableHead>
+                  <TableHead>Маршрут</TableHead>
+                  <TableHead>Причина</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {txQuery.data?.transactions.map((tx) => (
+                  <TableRow key={tx.id}>
+                    <TableCell className="text-xs text-neutral-500 dark:text-neutral-400">
+                      {formatDate(tx.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {tx.item ? (
+                        <Link
+                          href={`/dashboard/items?search=${encodeURIComponent(tx.item.sku)}`}
+                          className="hover:underline"
+                        >
+                          <span className="font-mono text-xs text-neutral-400">{tx.item.sku}</span>{' '}
+                          {tx.item.name}
+                        </Link>
+                      ) : (
+                        '—'
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={`rounded-md px-2 py-0.5 text-xs font-medium ${TX_TYPE_COLORS[tx.type]}`}
+                      >
+                        {TX_TYPE_LABELS[tx.type]}
+                      </span>
+                    </TableCell>
+                    <TableCell className="font-mono font-semibold">{tx.quantity}</TableCell>
+                    <TableCell className="text-xs text-neutral-600 dark:text-neutral-400">
+                      {fmtMovement(tx)}
+                    </TableCell>
+                    <TableCell className="max-w-[200px] truncate text-xs text-neutral-500 dark:text-neutral-400">
+                      {tx.reason ?? '—'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -278,16 +373,17 @@ function KpiCard({
         {label}
       </div>
       <div className={`mt-1 text-2xl font-semibold tabular-nums ${accentClass}`}>{value}</div>
-      {sub && (
-        <div className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{sub}</div>
-      )}
+      {sub && <div className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{sub}</div>}
     </>
   )
   const base =
     'block rounded-lg border border-neutral-200 bg-white p-4 shadow-sm transition dark:border-neutral-800 dark:bg-neutral-900'
   if (href) {
     return (
-      <Link href={href} className={`${base} hover:border-neutral-400 dark:hover:border-neutral-700`}>
+      <Link
+        href={href}
+        className={`${base} hover:border-neutral-400 dark:hover:border-neutral-700`}
+      >
         {inner}
       </Link>
     )

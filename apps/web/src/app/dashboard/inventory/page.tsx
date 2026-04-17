@@ -416,9 +416,7 @@ function Pagination({
           {total.toLocaleString('uk-UA')}
         </span>
         {loading && (
-          <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400">
-            завантаження…
-          </span>
+          <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400">завантаження…</span>
         )}
       </div>
       <div className="flex items-center gap-1">
@@ -437,11 +435,7 @@ function Pagination({
               …
             </span>
           ) : (
-            <PageButton
-              key={p}
-              onClick={() => onPageChange(p)}
-              active={p === page}
-            >
+            <PageButton key={p} onClick={() => onPageChange(p)} active={p === page}>
               {p}
             </PageButton>
           ),

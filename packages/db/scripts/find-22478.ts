@@ -25,7 +25,9 @@ for (const i of bySkuContains) {
 }
 
 // Also check legacy barcodes / qr
-const byBarcode = await prisma.$queryRaw<{ id: string; sku: string; name: string; ident: unknown }[]>`
+const byBarcode = await prisma.$queryRaw<
+  { id: string; sku: string; name: string; ident: unknown }[]
+>`
   SELECT id, sku, name, identification AS ident
   FROM "Item"
   WHERE identification->>'barcode' = '22478'

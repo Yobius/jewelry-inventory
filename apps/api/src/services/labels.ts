@@ -126,13 +126,7 @@ async function drawLabel(
   const innerY = y + pad
 
   // Outer border (thin, useful for cutting)
-  doc
-    .save()
-    .lineWidth(0.3)
-    .strokeColor('#cccccc')
-    .rect(x, y, w, h)
-    .stroke()
-    .restore()
+  doc.save().lineWidth(0.3).strokeColor('#cccccc').rect(x, y, w, h).stroke().restore()
 
   // Line 1 — SKU (small bold)
   doc
@@ -153,11 +147,7 @@ async function drawLabel(
     })
 
   // Material / carat / weight
-  const mat = [
-    item.material,
-    item.carat ? `${item.carat}°` : null,
-    `${item.weight}г`,
-  ]
+  const mat = [item.material, item.carat ? `${item.carat}°` : null, `${item.weight}г`]
     .filter(Boolean)
     .join(' · ')
   doc

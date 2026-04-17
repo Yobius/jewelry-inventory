@@ -72,10 +72,7 @@ export function createManufacturersRoute(jwtSecret: string) {
     const result = await deleteManufacturer(c.req.param('id'), c.get('userId'))
     if (result.status === 'not-found') return c.json({ error: 'Not found' }, 404)
     if (result.status === 'in-use') {
-      return c.json(
-        { error: 'Виробника не можна видалити', itemsCount: result.itemsCount },
-        409,
-      )
+      return c.json({ error: 'Виробника не можна видалити', itemsCount: result.itemsCount }, 409)
     }
     return c.body(null, 204)
   })

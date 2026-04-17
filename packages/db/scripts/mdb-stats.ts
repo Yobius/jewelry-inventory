@@ -33,7 +33,9 @@ console.log(`Products: ${products.length} rows`)
 console.log(`  unique ArtNum:  ${artNums.size}`)
 console.log(`  empty ArtNum:   ${emptyArt}`)
 console.log(`  duplicate ArtNum groups: ${dups.length}`)
-console.log(`  max duplicates for one ArtNum: ${dups.length ? Math.max(...dups.map(([, n]) => n)) : 0}`)
+console.log(
+  `  max duplicates for one ArtNum: ${dups.length ? Math.max(...dups.map(([, n]) => n)) : 0}`,
+)
 if (dups.length > 0) {
   console.log('  top 5 duplicated:')
   for (const [art, n] of dups.sort(([, a], [, b]) => b - a).slice(0, 5)) {
@@ -75,11 +77,7 @@ for (const [cid, n] of [...byClient.entries()].sort(([, a], [, b]) => b - a)) {
 const top = reader.getTable('TypeOfProduct').getData()
 console.log(`\nTypeOfProduct: ${top.length} rows`)
 for (const t of top) {
-  const mat = (t.IsGold as boolean)
-    ? 'GOLD'
-    : (t.IsSilver as boolean)
-      ? 'SILVER'
-      : 'OTHER'
+  const mat = (t.IsGold as boolean) ? 'GOLD' : (t.IsSilver as boolean) ? 'SILVER' : 'OTHER'
   console.log(`  ID=${t.ID} "${t.Type}" → material=${mat}, carat=${t.Probe}, IsWgh=${t.IsWgh}`)
 }
 

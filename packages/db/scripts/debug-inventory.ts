@@ -10,10 +10,7 @@ let totalSum = 0
 for (const inv of invs) {
   const q = inv.quantities as Record<string, number>
   const sum =
-    Number(q.warehouse ?? 0) +
-    Number(q.point1 ?? 0) +
-    Number(q.point2 ?? 0) +
-    Number(q.point3 ?? 0)
+    Number(q.warehouse ?? 0) + Number(q.point1 ?? 0) + Number(q.point2 ?? 0) + Number(q.point3 ?? 0)
   totalSum += sum
   if (sum !== 1) {
     const ident = inv.item.identification as Record<string, unknown>
@@ -25,6 +22,8 @@ console.log(`Total sum of quantities: ${totalSum}`)
 console.log(`Items with sum != 1: ${bad.length}`)
 console.log('\nFirst 15 anomalies:')
 for (const b of bad.slice(0, 15)) {
-  console.log(`  sku=${b.sku.padEnd(25)} sum=${b.sum}  q=${JSON.stringify(b.q)}  legacyId=${b.legacyId ?? '-'}`)
+  console.log(
+    `  sku=${b.sku.padEnd(25)} sum=${b.sum}  q=${JSON.stringify(b.q)}  legacyId=${b.legacyId ?? '-'}`,
+  )
 }
 await prisma.$disconnect()

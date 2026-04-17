@@ -53,7 +53,12 @@ console.log(`MDB active movements mapped: ${recordIdToLoc.size}`)
 
 // --- Iterate over Items in DB, reset inventory ---
 const items = await prisma.item.findMany({
-  select: { id: true, sku: true, identification: true, inventory: { select: { quantities: true } } },
+  select: {
+    id: true,
+    sku: true,
+    identification: true,
+    inventory: { select: { quantities: true } },
+  },
 })
 console.log(`Items in DB: ${items.length}`)
 
@@ -103,7 +108,9 @@ for (const item of items) {
   }
 
   if ((fixed + wrongBefore) % 500 === 0) {
-    console.log(`  progress: ${fixed + wrongBefore}/${items.length} (fixed=${fixed}, wrong=${wrongBefore}, unchanged=${unchanged}, orphan=${orphan})`)
+    console.log(
+      `  progress: ${fixed + wrongBefore}/${items.length} (fixed=${fixed}, wrong=${wrongBefore}, unchanged=${unchanged}, orphan=${orphan})`,
+    )
   }
 }
 

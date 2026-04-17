@@ -70,11 +70,7 @@ export default function UsersPage() {
     enabled: currentUser?.role === 'ADMIN',
   })
 
-  const updateRole = useMutation<
-    unknown,
-    Error,
-    { id: string; role: Role; name?: string }
-  >({
+  const updateRole = useMutation<unknown, Error, { id: string; role: Role; name?: string }>({
     mutationFn: (payload) =>
       apiRequest(`/api/users/${payload.id}`, {
         method: 'PATCH',
@@ -102,9 +98,7 @@ export default function UsersPage() {
         <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Користувачі
         </h2>
-        <Alert variant="destructive">
-          Доступ тільки для ADMIN. Твоя роль: {currentUser.role}.
-        </Alert>
+        <Alert variant="destructive">Доступ тільки для ADMIN. Твоя роль: {currentUser.role}.</Alert>
       </div>
     )
   }
@@ -147,7 +141,10 @@ export default function UsersPage() {
             <TableBody>
               {users.isLoading && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-neutral-500 dark:text-neutral-400">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-neutral-500 dark:text-neutral-400"
+                  >
                     Завантаження…
                   </TableCell>
                 </TableRow>
@@ -158,9 +155,7 @@ export default function UsersPage() {
                   <TableRow key={u.id}>
                     <TableCell>
                       <div className="font-mono text-xs">{u.email}</div>
-                      {isSelf && (
-                        <div className="text-xs text-blue-600 dark:text-blue-400">ти</div>
-                      )}
+                      {isSelf && <div className="text-xs text-blue-600 dark:text-blue-400">ти</div>}
                     </TableCell>
                     <TableCell>{u.name}</TableCell>
                     <TableCell>
@@ -292,12 +287,7 @@ function CreateUserDialog({
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="new-name">Ім'я</Label>
-          <Input
-            id="new-name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <Input id="new-name" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="new-password">Пароль (8+ символів)</Label>
@@ -312,11 +302,7 @@ function CreateUserDialog({
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="new-role">Роль</Label>
-          <Select
-            id="new-role"
-            value={role}
-            onChange={(e) => setRole(e.target.value as Role)}
-          >
+          <Select id="new-role" value={role} onChange={(e) => setRole(e.target.value as Role)}>
             {(Object.keys(ROLE_LABELS) as Role[]).map((r) => (
               <option key={r} value={r}>
                 {ROLE_LABELS[r]}
@@ -368,9 +354,7 @@ function ResetPasswordDialog({
     <Dialog open={user !== null} onOpenChange={(v) => !v && onClose()}>
       <DialogHeader>
         <DialogTitle>Новий пароль</DialogTitle>
-        <DialogDescription>
-          Для {user?.email}. Старий пароль буде перезаписано.
-        </DialogDescription>
+        <DialogDescription>Для {user?.email}. Старий пароль буде перезаписано.</DialogDescription>
       </DialogHeader>
       <form
         onSubmit={(e) => {

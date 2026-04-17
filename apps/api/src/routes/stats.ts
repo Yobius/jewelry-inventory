@@ -1,11 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { type AuthVariables, createAuthMiddleware } from '../lib/auth-middleware.js'
-import {
-  getDashboardStats,
-  getLowStockItems,
-  getSalesHistory,
-} from '../services/stats.js'
+import { getDashboardStats, getLowStockItems, getSalesHistory } from '../services/stats.js'
 
 const salesQuerySchema = z.object({
   from: z.string().optional(),

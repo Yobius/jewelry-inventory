@@ -54,7 +54,9 @@ const samples = await prisma.item.findMany({
 })
 console.log('\n🔍 Sample items:')
 for (const s of samples) {
-  console.log(`  ${s.sku.padEnd(20)} ${s.name.padEnd(20)} ${s.material}/${s.carat ?? '-'} ${s.weight}г`)
+  console.log(
+    `  ${s.sku.padEnd(20)} ${s.name.padEnd(20)} ${s.material}/${s.carat ?? '-'} ${s.weight}г`,
+  )
   console.log(`    inventory: ${JSON.stringify(s.inventory?.quantities)}`)
 }
 

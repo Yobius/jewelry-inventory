@@ -54,24 +54,17 @@ const AUTO_DETECT_PATTERNS: Record<ItemField, RegExp[]> = {
   unitPrice: [
     /^\s*(price|ціна(?!.*грам)|цена(?!.*грам)|вартість|roz\.?price|roz\s*ціна|outprice|out\s*price)\s*$/i,
   ],
-  perGram: [
-    /^\s*(per\s*gram|за\s*грам|ціна\s*за\s*г|цена\s*за\s*г|грам\s*ціна|per\s*g)/i,
-  ],
+  perGram: [/^\s*(per\s*gram|за\s*грам|ціна\s*за\s*г|цена\s*за\s*г|грам\s*ціна|per\s*g)/i],
   barcode: [/^\s*(barcode|штрих[-\s]?код|bar[-\s]?code|ean)/i],
   quantity: [/^\s*(q(ty|uantity)|кол[-\s]?во|кількість|количество|шт|к-сть)/i],
   tags: [/^\s*(tags|категорія|категория|group|группа|вид)/i],
-  manufacturer: [
-    /^\s*(manufacturer|виробник|производитель|фабрика|firm|фірма|фирма|brand|бренд)/i,
-  ],
+  manufacturer: [/^\s*(manufacturer|виробник|производитель|фабрика|firm|фірма|фирма|brand|бренд)/i],
   stones: [/^\s*(stones?|камні|камен(ь|і)|вставк[аи]|insert)/i],
 }
 
 function autoDetect(headers: ParsedHeader[]): FieldMapping {
   const mapping: FieldMapping = {}
-  for (const [field, patterns] of Object.entries(AUTO_DETECT_PATTERNS) as [
-    ItemField,
-    RegExp[],
-  ][]) {
+  for (const [field, patterns] of Object.entries(AUTO_DETECT_PATTERNS) as [ItemField, RegExp[]][]) {
     for (const h of headers) {
       if (!h) continue
       if (patterns.some((p) => p.test(h))) {
@@ -359,16 +352,16 @@ const DEFAULT_MATERIAL_TRANSFORM: MaterialTransform = {
   SILVER: 'SILVER',
   PLATINUM: 'PLATINUM',
   OTHER: 'OTHER',
-  'золото': 'GOLD',
-  'золот': 'GOLD',
-  'au': 'GOLD',
-  'ag': 'SILVER',
-  'pt': 'PLATINUM',
-  'срібло': 'SILVER',
-  'сребро': 'SILVER',
-  'серебро': 'SILVER',
-  'сер': 'SILVER',
-  'платина': 'PLATINUM',
+  золото: 'GOLD',
+  золот: 'GOLD',
+  au: 'GOLD',
+  ag: 'SILVER',
+  pt: 'PLATINUM',
+  срібло: 'SILVER',
+  сребро: 'SILVER',
+  серебро: 'SILVER',
+  сер: 'SILVER',
+  платина: 'PLATINUM',
 }
 
 function readStringCell(raw: ParsedRow, key?: string): string | null {
@@ -434,9 +427,7 @@ function buildItemPayload(
   if (weightNum == null || weightNum <= 0) return null
   const weight = new Prisma.Decimal(weightNum.toFixed(2))
 
-  const unitPrice = new Prisma.Decimal(
-    (readNumberCell(ctx.raw, mapping.unitPrice) ?? 0).toFixed(2),
-  )
+  const unitPrice = new Prisma.Decimal((readNumberCell(ctx.raw, mapping.unitPrice) ?? 0).toFixed(2))
   const perGram = new Prisma.Decimal((readNumberCell(ctx.raw, mapping.perGram) ?? 0).toFixed(2))
 
   const barcode = readStringCell(ctx.raw, mapping.barcode)

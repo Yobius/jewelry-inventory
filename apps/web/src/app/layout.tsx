@@ -1,6 +1,6 @@
+import { themeInitScript } from '@/lib/theme'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { themeInitScript } from '@/lib/theme'
 import { Providers } from './providers'
 import './globals.css'
 

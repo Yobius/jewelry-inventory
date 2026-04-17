@@ -1,8 +1,8 @@
 import { prisma } from '@jewelry/db'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { type AuthVariables, createAuthMiddleware, requireRole } from '../lib/auth-middleware.js'
 import { writeAudit } from '../lib/audit.js'
+import { type AuthVariables, createAuthMiddleware, requireRole } from '../lib/auth-middleware.js'
 import { hashPassword } from '../lib/password.js'
 
 const roleEnum = z.enum(['ADMIN', 'MANAGER', 'SELLER', 'CASHIER', 'AUDITOR'])

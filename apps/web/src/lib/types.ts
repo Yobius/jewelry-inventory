@@ -8,6 +8,7 @@ export type Item = {
   id: string
   sku: string
   name: string
+  category: string | null
   specs: { tags?: string[]; width?: number; height?: number; depth?: number }
   material: Material
   /** Проба / fineness: 585, 750, 925, 999… */

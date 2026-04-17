@@ -70,9 +70,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     const key = t.createdAt.toISOString().slice(0, 10)
     const b = dayBuckets.get(key)
     if (!b) continue
-    const price = Number(
-      (t.item?.pricing as { unitPrice?: string } | null)?.unitPrice ?? 0,
-    )
+    const price = Number((t.item?.pricing as { unitPrice?: string } | null)?.unitPrice ?? 0)
     b.revenue += price * t.quantity
     b.sales += 1
   }
@@ -154,7 +152,11 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     .filter((x): x is { id: string; sku: string; name: string; sold: number } => x !== null)
 
   return {
-    today: { sales: todayStats.sales, units: todayStats.units, revenue: todayStats.revenue.toFixed(2) },
+    today: {
+      sales: todayStats.sales,
+      units: todayStats.units,
+      revenue: todayStats.revenue.toFixed(2),
+    },
     week: { sales: weekStats.sales, units: weekStats.units, revenue: weekStats.revenue.toFixed(2) },
     inventory: { totalItems, totalUnits, byLocation, lowStockCount },
     byMaterial,
@@ -246,9 +248,7 @@ export async function getSalesHistory(params: SalesHistoryParams) {
 
   // Compute revenue per transaction
   const withRevenue = filtered.map((t) => {
-    const price = Number(
-      (t.item?.pricing as { unitPrice?: string } | null)?.unitPrice ?? 0,
-    )
+    const price = Number((t.item?.pricing as { unitPrice?: string } | null)?.unitPrice ?? 0)
     return {
       id: t.id,
       createdAt: t.createdAt,
@@ -262,10 +262,7 @@ export async function getSalesHistory(params: SalesHistoryParams) {
     }
   })
 
-  const totalRevenue = withRevenue.reduce(
-    (sum, t) => sum + Number(t.total),
-    0,
-  )
+  const totalRevenue = withRevenue.reduce((sum, t) => sum + Number(t.total), 0)
   const totalUnits = withRevenue.reduce((sum, t) => sum + t.quantity, 0)
 
   return {

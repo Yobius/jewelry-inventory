@@ -21,9 +21,7 @@ for (const u of users) {
 const target = users.find((u) => u.email === 'jaroha0507@gmail.com')
 if (target) {
   console.log('\n✓ FOUND jaroha0507@gmail.com:')
-  console.log(
-    JSON.stringify({ ...target, password: `${target.password.slice(0, 20)}…` }, null, 2),
-  )
+  console.log(JSON.stringify({ ...target, password: `${target.password.slice(0, 20)}…` }, null, 2))
   writeFileSync('/tmp/jaroha-user.json', JSON.stringify(target, null, 2))
   console.log('\n→ full record saved to /tmp/jaroha-user.json')
 }

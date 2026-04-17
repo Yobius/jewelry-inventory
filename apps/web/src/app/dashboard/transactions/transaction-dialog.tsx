@@ -121,7 +121,9 @@ export function TransactionDialog({ open, onOpenChange }: Props) {
             ))}
           </Select>
           {form.formState.errors.itemId && (
-            <p className="text-xs text-red-600 dark:text-red-400">{form.formState.errors.itemId.message}</p>
+            <p className="text-xs text-red-600 dark:text-red-400">
+              {form.formState.errors.itemId.message}
+            </p>
           )}
         </div>
 
@@ -138,7 +140,9 @@ export function TransactionDialog({ open, onOpenChange }: Props) {
             <Label htmlFor="quantity">Количество</Label>
             <Input id="quantity" type="number" {...form.register('quantity')} />
             {form.formState.errors.quantity && (
-              <p className="text-xs text-red-600 dark:text-red-400">{form.formState.errors.quantity.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400">
+                {form.formState.errors.quantity.message}
+              </p>
             )}
           </div>
         </div>
@@ -156,7 +160,9 @@ export function TransactionDialog({ open, onOpenChange }: Props) {
                 ))}
               </Select>
               {form.formState.errors.from && (
-                <p className="text-xs text-red-600 dark:text-red-400">{form.formState.errors.from.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400">
+                  {form.formState.errors.from.message}
+                </p>
               )}
             </div>
           )}
@@ -172,7 +178,9 @@ export function TransactionDialog({ open, onOpenChange }: Props) {
                 ))}
               </Select>
               {form.formState.errors.to && (
-                <p className="text-xs text-red-600 dark:text-red-400">{form.formState.errors.to.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400">
+                  {form.formState.errors.to.message}
+                </p>
               )}
             </div>
           )}

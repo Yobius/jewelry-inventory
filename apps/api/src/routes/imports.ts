@@ -34,10 +34,7 @@ export function createImportsRoute(jwtSecret: string) {
       return c.json({ error: 'Файл не надіслано (multipart field "file")' }, 400)
     }
     if (typeof paramsRaw !== 'string') {
-      return c.json(
-        { error: 'Параметри не надіслані (multipart field "params" з JSON)' },
-        400,
-      )
+      return c.json({ error: 'Параметри не надіслані (multipart field "params" з JSON)' }, 400)
     }
     let paramsJson: unknown
     try {

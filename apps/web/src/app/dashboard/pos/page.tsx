@@ -82,9 +82,7 @@ export default function PosPage() {
 
   const lookup = useMutation<Item, Error, string>({
     mutationFn: async (q) => {
-      const list = await apiRequest<ItemsList>(
-        `/api/items?take=5&search=${encodeURIComponent(q)}`,
-      )
+      const list = await apiRequest<ItemsList>(`/api/items?take=5&search=${encodeURIComponent(q)}`)
       // Prefer exact match by sku / barcode / qrCode
       const exact = list.items.find(
         (i) =>
@@ -120,8 +118,7 @@ export default function PosPage() {
   >({
     mutationFn: async (payload) => {
       const receiptId = `POS-${Date.now()}`
-      const discountNote =
-        payload.discountPct > 0 ? ` · знижка ${payload.discountPct}%` : ''
+      const discountNote = payload.discountPct > 0 ? ` · знижка ${payload.discountPct}%` : ''
       let created = 0
       for (const line of payload.lines) {
         await apiRequest('/api/transactions', {
@@ -158,10 +155,7 @@ export default function PosPage() {
     setCode('')
   }, [code, lookup])
 
-  const total = lines.reduce(
-    (sum, l) => sum + Number(l.unitPrice || 0) * l.qty,
-    0,
-  )
+  const total = lines.reduce((sum, l) => sum + Number(l.unitPrice || 0) * l.qty, 0)
   const totalUnits = lines.reduce((sum, l) => sum + l.qty, 0)
 
   function updateLine(idx: number, partial: Partial<ReceiptLine>) {
@@ -179,9 +173,7 @@ export default function PosPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
-          Каса · POS
-        </h2>
+        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">Каса · POS</h2>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
           Наведи сканер на штрих-код або QR, натисни Enter. Товар відразу додасться в чек.
         </p>
@@ -241,10 +233,10 @@ export default function PosPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Чек ({lines.length} позицій, {totalUnits} шт.)</CardTitle>
-          <CardDescription>
-            Кількість та ціну можна змінити перед проведенням
-          </CardDescription>
+          <CardTitle>
+            Чек ({lines.length} позицій, {totalUnits} шт.)
+          </CardTitle>
+          <CardDescription>Кількість та ціну можна змінити перед проведенням</CardDescription>
         </CardHeader>
         <CardContent>
           {lines.length === 0 ? (
@@ -265,15 +257,12 @@ export default function PosPage() {
               </TableHeader>
               <TableBody>
                 {lines.map((l, idx) => {
-                  const stock =
-                    l.item.inventory?.quantities?.[location as string] ?? 0
+                  const stock = l.item.inventory?.quantities?.[location as string] ?? 0
                   const lowStock = l.qty > stock
                   return (
                     <TableRow key={l.item.id}>
                       <TableCell>
-                        <div className="font-mono text-xs text-neutral-500">
-                          {l.item.sku}
-                        </div>
+                        <div className="font-mono text-xs text-neutral-500">{l.item.sku}</div>
                         <div>{l.item.name}</div>
                         {lowStock && (
                           <div className="text-xs text-red-600 dark:text-red-400">
@@ -287,9 +276,7 @@ export default function PosPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() =>
-                              updateLine(idx, { qty: Math.max(1, l.qty - 1) })
-                            }
+                            onClick={() => updateLine(idx, { qty: Math.max(1, l.qty - 1) })}
                           >
                             −
                           </Button>
@@ -308,9 +295,7 @@ export default function PosPage() {
                           type="number"
                           step="0.01"
                           value={l.unitPrice}
-                          onChange={(e) =>
-                            updateLine(idx, { unitPrice: e.target.value })
-                          }
+                          onChange={(e) => updateLine(idx, { unitPrice: e.target.value })}
                           className="text-right font-mono"
                         />
                       </TableCell>
@@ -363,9 +348,7 @@ export default function PosPage() {
         </CardContent>
       </Card>
 
-      {checkout.error && (
-        <Alert variant="destructive">{checkout.error.message}</Alert>
-      )}
+      {checkout.error && <Alert variant="destructive">{checkout.error.message}</Alert>}
     </div>
   )
 }

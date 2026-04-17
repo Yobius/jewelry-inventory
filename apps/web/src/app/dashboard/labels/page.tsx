@@ -184,11 +184,7 @@ export default function LabelsPage() {
           <Button onClick={() => downloadPdf(false)} disabled={!canDownload}>
             {busy ? 'Генеруємо PDF…' : 'Скачати PDF'}
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => downloadPdf(true)}
-            disabled={!canDownload}
-          >
+          <Button variant="outline" onClick={() => downloadPdf(true)} disabled={!canDownload}>
             Скачати + записати в чергу
           </Button>
         </CardContent>
@@ -251,9 +247,7 @@ export default function LabelsPage() {
                   <TableRow key={item.id}>
                     <TableCell className="font-mono text-xs">{item.sku}</TableCell>
                     <TableCell>{item.name}</TableCell>
-                    <TableCell className="text-right font-mono text-xs">
-                      {item.weight} г
-                    </TableCell>
+                    <TableCell className="text-right font-mono text-xs">{item.weight} г</TableCell>
                     <TableCell className="text-right font-mono text-xs">
                       {item.pricing?.unitPrice ?? '—'} ₴
                     </TableCell>
