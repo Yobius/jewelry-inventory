@@ -429,7 +429,7 @@ function Pagination({
           ‹
         </PageButton>
         {pages.map((p, idx) =>
-          p === '…' ? (
+          typeof p === 'string' ? (
             <span
               key={`dots-${idx}`}
               className="px-2 text-xs text-neutral-400 dark:text-neutral-600"

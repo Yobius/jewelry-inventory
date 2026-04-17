@@ -77,7 +77,7 @@ export function TerminalPaymentDialog({
     if (!create.data?.liqpay) return
     const { actionUrl, data, signature } = create.data.liqpay
     const url = `${actionUrl}?data=${encodeURIComponent(data)}&signature=${encodeURIComponent(signature)}`
-    QRCode.toDataURL(url, { width: 280, margin: 1 }, (err, u) => {
+    QRCode.toDataURL(url, { width: 280, margin: 1 }, (err: Error | null | undefined, u: string) => {
       if (!err) setQrDataUrl(u)
     })
   }, [create.data])

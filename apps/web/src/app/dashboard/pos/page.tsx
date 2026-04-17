@@ -131,7 +131,7 @@ export default function PosPage() {
             type: 'OUT',
             quantity: line.qty,
             from: payload.location,
-            reason: `${receiptId}${methodNote}${discountNote} · ${line.item.sku} × ${line.qty} @ ${line.unitPrice}`,
+            reason: `${receiptId}${discountNote} · ${line.item.sku} × ${line.qty} @ ${line.unitPrice}`,
           },
         })
         created++
@@ -353,7 +353,7 @@ export default function PosPage() {
               Очистити
             </Button>
             <Button
-              onClick={() => checkout.mutate({ lines, location })}
+              onClick={() => checkout.mutate({ lines, location, discountPct })}
               disabled={lines.length === 0 || checkout.isPending}
               className="text-lg"
             >
