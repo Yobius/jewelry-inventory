@@ -11,9 +11,9 @@ export const MATERIAL_KEYS: Material[] = ['GOLD', 'SILVER', 'PLATINUM', 'OTHER']
 
 export const LOCATION_LABELS: Record<LocationKey, string> = {
   warehouse: 'Склад',
-  point1: 'Точка 1',
-  point2: 'Точка 2',
-  point3: 'Точка 3',
+  point1: 'Золото-Слобожа',
+  point2: 'Донец',
+  point3: 'Серебро-Слобожа',
 }
 
 export const LOCATION_KEYS: LocationKey[] = ['warehouse', 'point1', 'point2', 'point3']
@@ -24,7 +24,7 @@ export function totalQuantity(q: Partial<Quantities> | undefined | null): number
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString('ru-RU', {
+  return new Date(iso).toLocaleString('uk-UA', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

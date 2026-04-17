@@ -8,6 +8,7 @@ export type DomainEvent =
       itemId: string
       kind: 'IN' | 'OUT' | 'MOVE' | 'ADJUSTMENT'
     }
+  | { type: 'import.completed'; importId: string }
 
 type Subscriber = (event: DomainEvent) => void
 

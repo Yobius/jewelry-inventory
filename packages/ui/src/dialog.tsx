@@ -37,7 +37,7 @@ export function Dialog({ open, onOpenChange, children, className }: DialogProps)
         role="dialog"
         aria-modal="true"
         className={cn(
-          'relative z-10 max-h-[90vh] w-full max-w-md overflow-auto rounded-lg border border-neutral-200 bg-white p-6 shadow-lg',
+          'relative z-10 max-h-[90vh] w-full max-w-md overflow-auto rounded-lg border border-neutral-200 bg-white p-6 shadow-lg dark:border-neutral-800 dark:bg-neutral-900',
           className,
         )}
       >
@@ -52,11 +52,13 @@ export function DialogHeader({ children }: { children: ReactNode }) {
 }
 
 export function DialogTitle({ children }: { children: ReactNode }) {
-  return <h2 className="text-lg font-semibold text-neutral-900">{children}</h2>
+  return (
+    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">{children}</h2>
+  )
 }
 
 export function DialogDescription({ children }: { children: ReactNode }) {
-  return <p className="text-sm text-neutral-500">{children}</p>
+  return <p className="text-sm text-neutral-500 dark:text-neutral-400">{children}</p>
 }
 
 export function DialogFooter({ children }: { children: ReactNode }) {

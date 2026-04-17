@@ -9,10 +9,10 @@ import { useState } from 'react'
 import { TransactionDialog } from './transaction-dialog'
 
 const TYPE_COLORS: Record<Transaction['type'], string> = {
-  IN: 'bg-green-50 text-green-700',
-  OUT: 'bg-red-50 text-red-700',
-  MOVE: 'bg-blue-50 text-blue-700',
-  ADJUSTMENT: 'bg-amber-50 text-amber-700',
+  IN: 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300',
+  OUT: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
+  MOVE: 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
+  ADJUSTMENT: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
 }
 
 function formatMovement(tx: Transaction): string {
@@ -36,8 +36,12 @@ export default function TransactionsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-neutral-900">Транзакции</h2>
-          <p className="text-sm text-neutral-500">Приходы, отгрузки, перемещения</p>
+          <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
+            Транзакции
+          </h2>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            Приходы, отгрузки, перемещения
+          </p>
         </div>
         <Button onClick={() => setCreating(true)}>+ Новая транзакция</Button>
       </div>
@@ -56,26 +60,30 @@ export default function TransactionsPage() {
         <TableBody>
           {query.isLoading && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-neutral-500">
+              <TableCell colSpan={6} className="text-center text-neutral-500 dark:text-neutral-400">
                 Загрузка…
               </TableCell>
             </TableRow>
           )}
           {query.data?.transactions.length === 0 && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-neutral-500">
+              <TableCell colSpan={6} className="text-center text-neutral-500 dark:text-neutral-400">
                 Пока нет транзакций
               </TableCell>
             </TableRow>
           )}
           {query.data?.transactions.map((tx) => (
             <TableRow key={tx.id}>
-              <TableCell className="text-xs text-neutral-600">{formatDate(tx.createdAt)}</TableCell>
+              <TableCell className="text-xs text-neutral-600 dark:text-neutral-400">
+                {formatDate(tx.createdAt)}
+              </TableCell>
               <TableCell className="text-xs">
                 {tx.item ? (
                   <div className="flex flex-col">
-                    <span className="font-mono text-neutral-500">{tx.item.sku}</span>
-                    <span className="text-neutral-900">{tx.item.name}</span>
+                    <span className="font-mono text-neutral-500 dark:text-neutral-400">
+                      {tx.item.sku}
+                    </span>
+                    <span className="text-neutral-900 dark:text-neutral-100">{tx.item.name}</span>
                   </div>
                 ) : (
                   '—'
@@ -90,7 +98,9 @@ export default function TransactionsPage() {
               </TableCell>
               <TableCell className="font-semibold">{tx.quantity}</TableCell>
               <TableCell className="text-xs">{formatMovement(tx)}</TableCell>
-              <TableCell className="text-xs text-neutral-600">{tx.reason ?? '—'}</TableCell>
+              <TableCell className="text-xs text-neutral-600 dark:text-neutral-400">
+                {tx.reason ?? '—'}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

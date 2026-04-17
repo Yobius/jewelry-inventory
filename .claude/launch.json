@@ -1,0 +1,33 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": [
+        "/opt/homebrew/lib/node_modules/pnpm/bin/pnpm.cjs",
+        "--filter",
+        "@jewelry/web",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "api",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": [
+        "/opt/homebrew/lib/node_modules/pnpm/bin/pnpm.cjs",
+        "--filter",
+        "@jewelry/api",
+        "dev"
+      ],
+      "port": 4000
+    },
+    {
+      "name": "ping",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "require('http').createServer((_,res)=>res.end('ok')).listen(4100)"],
+      "port": 4100
+    }
+  ]
+}

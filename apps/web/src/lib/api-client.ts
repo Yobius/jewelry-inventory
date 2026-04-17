@@ -10,7 +10,12 @@ export class ApiError extends Error {
   }
 }
 
-export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
+/**
+ * In production nginx proxies `/api`, `/auth`, `/health` on the same origin.
+ * In dev we set NEXT_PUBLIC_API_URL to the API port directly (see apps/web/.env).
+ * An empty string means "same origin".
+ */
+export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
 
 type RequestOptions = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'

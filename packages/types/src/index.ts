@@ -16,7 +16,37 @@ export type ItemPricing = {
 
 export type ItemIdentification = {
   qrCode: string
+  /** Штрих-код Code 128 для бірки */
   barcode?: string
+}
+
+/** Мапінг Excel-колонок на поля Item. Значення — назва колонки у файлі. */
+export type ImportFieldMapping = {
+  sku?: string
+  name?: string
+  material?: string
+  carat?: string
+  weight?: string
+  unitPrice?: string
+  perGram?: string
+  manufacturer?: string
+  stones?: string
+  quantity?: string
+  /** Початкова локація для новостворених позицій (warehouse/point1/...) */
+  initialLocation?: string
+}
+
+/** Правила перетворення значень із Excel в наші enum-и. */
+export type ImportTransforms = {
+  material?: Record<string, 'GOLD' | 'SILVER' | 'PLATINUM' | 'OTHER'>
+}
+
+/** Журнал помилок на один рядок Excel */
+export type ImportRowError = {
+  row: number
+  field?: string
+  message: string
+  rawValue?: unknown
 }
 
 export type LocationQuantities = {

@@ -56,8 +56,10 @@ export default function ItemsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-neutral-900">Товары</h2>
-          <p className="text-sm text-neutral-500">Каталог украшений с остатками</p>
+          <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">Товары</h2>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            Каталог украшений с остатками
+          </p>
         </div>
         <Button onClick={() => setCreating(true)}>+ Новый товар</Button>
       </div>

@@ -46,8 +46,10 @@ export default function ReportsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-neutral-900">Отчёты</h2>
-        <p className="text-sm text-neutral-500">Экспорт данных в PDF и XLSX</p>
+        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">Отчёты</h2>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          Экспорт данных в PDF и XLSX
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
@@ -76,7 +78,7 @@ export default function ReportsPage() {
         </Card>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   )
 }

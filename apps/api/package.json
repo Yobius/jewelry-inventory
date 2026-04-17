@@ -16,6 +16,7 @@
     "@jewelry/db": "workspace:*",
     "@jewelry/types": "workspace:*",
     "argon2": "^0.41.1",
+    "bwip-js": "^4.5.1",
     "exceljs": "^4.4.0",
     "hono": "^4.6.12",
     "jose": "^5.9.6",

@@ -113,8 +113,10 @@ export default function ScanPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-neutral-900">QR-сканер</h2>
-        <p className="text-sm text-neutral-500">Наведите камеру на QR-код товара</p>
+        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">QR-сканер</h2>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          Наведите камеру на QR-код товара
+        </p>
       </div>
 
       <Card>
@@ -129,7 +131,7 @@ export default function ScanPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <div className="aspect-video w-full max-w-2xl overflow-hidden rounded-lg border border-neutral-200 bg-black">
+          <div className="aspect-video w-full max-w-2xl overflow-hidden rounded-lg border border-neutral-200 bg-black dark:border-neutral-800">
             <video ref={videoRef} className="h-full w-full object-cover" playsInline muted>
               <track kind="captions" />
             </video>
@@ -146,7 +148,7 @@ export default function ScanPage() {
           </div>
           {error && <Alert variant="destructive">{error}</Alert>}
           {lastCode && !match && (
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Последний код: <span className="font-mono">{lastCode}</span> — товар не найден
             </p>
           )}
@@ -161,16 +163,16 @@ export default function ScanPage() {
           </CardHeader>
           <CardContent>
             <dl className="grid grid-cols-2 gap-3 text-sm">
-              <dt className="font-medium text-neutral-700">SKU</dt>
+              <dt className="font-medium text-neutral-700 dark:text-neutral-300">SKU</dt>
               <dd className="font-mono">{match.sku}</dd>
-              <dt className="font-medium text-neutral-700">Название</dt>
+              <dt className="font-medium text-neutral-700 dark:text-neutral-300">Название</dt>
               <dd>{match.name}</dd>
-              <dt className="font-medium text-neutral-700">Материал</dt>
+              <dt className="font-medium text-neutral-700 dark:text-neutral-300">Материал</dt>
               <dd>
                 {match.material}
                 {match.carat ? ` · ${match.carat}` : ''}
               </dd>
-              <dt className="font-medium text-neutral-700">Вес</dt>
+              <dt className="font-medium text-neutral-700 dark:text-neutral-300">Вес</dt>
               <dd>{match.weight} г</dd>
             </dl>
           </CardContent>
