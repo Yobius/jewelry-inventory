@@ -13,7 +13,9 @@ export type AuthUser = {
 type AuthState = {
   token: string | null
   user: AuthUser | null
+  accessConfirmed: boolean
   setSession: (session: { token: string; user: AuthUser }) => void
+  confirmAccess: () => void
   clear: () => void
 }
 
@@ -22,8 +24,10 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
-      setSession: ({ token, user }) => set({ token, user }),
-      clear: () => set({ token: null, user: null }),
+      accessConfirmed: false,
+      setSession: ({ token, user }) => set({ token, user, accessConfirmed: false }),
+      confirmAccess: () => set({ accessConfirmed: true }),
+      clear: () => set({ token: null, user: null, accessConfirmed: false }),
     }),
     {
       name: 'jewelry-auth',

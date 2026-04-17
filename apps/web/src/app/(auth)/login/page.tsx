@@ -45,7 +45,7 @@ export default function LoginPage() {
       }),
     onSuccess: (data) => {
       setSession({ token: data.token, user: data.user })
-      router.replace('/dashboard')
+      router.replace('/access-code')
     },
   })
 

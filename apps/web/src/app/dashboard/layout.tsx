@@ -47,15 +47,17 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const token = useAuthStore((s) => s.token)
   const user = useAuthStore((s) => s.user)
+  const accessConfirmed = useAuthStore((s) => s.accessConfirmed)
   const clear = useAuthStore((s) => s.clear)
 
   useEffect(() => {
     if (!token) router.replace('/login')
-  }, [router, token])
+    else if (!accessConfirmed) router.replace('/access-code')
+  }, [router, token, accessConfirmed])
 
   useInventoryStream()
 
-  if (!token || !user) return null
+  if (!token || !user || !accessConfirmed) return null
 
   const visibleNav = nav.filter((n) => !n.roles || n.roles.includes(user.role))
 
