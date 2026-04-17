@@ -119,6 +119,7 @@ model Item {
   id             String         @id @default(cuid())
   sku            String         @unique
   name           String
+  category       String?
   specs          Json
   material       Material
   carat          Int?
@@ -141,6 +142,7 @@ model Item {
 
   @@index([sku])
   @@index([name])
+  @@index([category])
   @@index([manufacturerId])
   @@index([supplierId])
   @@index([material, weight])
