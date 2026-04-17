@@ -1,4 +1,13 @@
-import type { LocationKey, Quantities } from './types'
+import type { LocationKey, Material, Quantities } from './types'
+
+export const MATERIAL_LABELS: Record<Material, string> = {
+  GOLD: 'Золото',
+  SILVER: 'Серебро',
+  PLATINUM: 'Платина',
+  OTHER: 'Другое',
+}
+
+export const MATERIAL_KEYS: Material[] = ['GOLD', 'SILVER', 'PLATINUM', 'OTHER']
 
 export const LOCATION_LABELS: Record<LocationKey, string> = {
   warehouse: 'Склад',
